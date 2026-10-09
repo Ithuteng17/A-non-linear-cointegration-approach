@@ -4,7 +4,7 @@ A comprehensive research project implementing a non-linear cointegration approac
 
 ## 📋 Overview
 
-Traditional Granger cointegration approaches assume linear relationships between variables. However, financial time series—particularly exchange rates—often exhibit non-linear behavior. This project introduces a hybrid MS-VECM framework that accounts for regime-switching dynamics and non-linear cointegration patterns in foreign exchange markets.
+Traditional Granger cointegration approaches assume linear relationships between variables. However, financial time series—particularly exchange rates—often exhibit non-linear behavior. This project addresses that gap by applying a regime-switching cointegration framework.
 
 ### Key Innovation
 The research combines:
@@ -116,7 +116,7 @@ If you use this research in your work, please cite:
 
 ```bibtex
 @research{NonlinearCointegration2024,
-  author = {Your Name},
+  author = {Ithuteng17},
   title = {Non-Linear Cointegration Approach: MS-VECM for Exchange Rates},
   year = {2024},
   url = {https://github.com/Ithuteng17/A-non-linear-cointegration-approach}
@@ -127,7 +127,7 @@ If you use this research in your work, please cite:
 
 For questions, suggestions, or collaboration opportunities:
 - **GitHub Issues**: [Open an issue](https://github.com/Ithuteng17/A-non-linear-cointegration-approach/issues)
-- **Email**: [Your Email]
+- **Email**: [intakhwana@hotmail.com](mailto:intakhwana@hotmail.com)
 
 ## 📜 License
 
