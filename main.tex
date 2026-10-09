@@ -1,0 +1,374 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage[title]{appendix}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{manyfoot}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage[round]{natbib}
+\usepackage{orcidlink}
+\hypersetup{
+    colorlinks=true,
+    citecolor={blue},
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,    
+    }
+
+
+% Theorem styles
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\raggedbottom
+
+\title{A Regime-Switching Cointegration Approach to ZAR/USD and BWP/USD Exchange Rates}
+\author{
+  Ithuteng A. Ntakhwana\,\orcidlink{0009-0001-6345-1971},
+  Dr. Katleho D. Makatjane* \\ Department of Statistics, University of Botswana, Gaborone, Botswana \\
+  *Email: \email{makatjanek@ub.ac.bw} 
+}
+
+\date{}
+\begin{document}
+
+\maketitle
+
+\abstract{Granger's cointegration of two or more time series datasets is widely viewed as involving an aspect of linearity or a linear relationship between macroeconomic variables. However, that may not be the case with macroeconomic datasets and financial data. In times of global recessions and the COVID-19 pandemic, economic volatility among currencies worldwide has seen fluctuations, changes and regime shifts which in the short term deviate from achieving cointegration. These can be captured and handled by employing a Markov chain process, particularly a Markov switching (MS) framework with transition probabilities across regime shifts. The introduction of the Markov switching vector error correction model (MS-VECM) is however due to its limitation in packages, and with the employment of Gaussian mixture hidden Markov models, MS(GMHMM)-VECM helps capture and stabilise short-term fluctuations. In the long term, it helps determine cointegration between the two nonlinear exchange rates, the BWP/USD and ZAR/USD. The implementation of the Clayton copula, an indication of association having obtained cointegration between the two exchange rates of BWP/USD and ZAR/USD as a dependency measure showed that there is a positive dependence in the long term between the two exchange rates.}
+\newline
+\newline
+\textbf{Keywords}: {Clayton copula, Dependency measures, Johansen cointegration, Markov Switching Vector Error Correction Model}
+
+\maketitle
+
+
+\section{Introduction}\label{Intro}
+The Botswana Pula (BWP) was introduced in 1976, replacing the South African Rand (ZAR). Upon its introduction, the Pula was pegged to a basket of currencies, including the US dollar (USD) and the other major currencies of Botswana’s trading partners \citep{Thupeng2021}. As commodity prices surged, especially for diamonds, the Pula strengthened against the USD, and the appreciation was due to Botswana's sound fiscal and monetary policies and increased foreign investment. However, the 2007-2009 global financial crisis has led to a decline in global commodity demand, weakening Botswana’s export earnings. 
+These factors caused a depreciation of the Pula against the USD during this period, as investors sought safe-haven currencies like the USD. During the COVID-19 pandemic, the global economic downturn led to high volatility in the exchange rate of BWP/USD. This time, reduced demand for commodities like diamonds and tourism affected Botswana's export-driven economy, causing the Pula to depreciate. According to \cite{WCER2024}, the recovery in global commodity markets contributed to the stabilisation of the Botswana Pula (BWP). However, persistent inflationary pressures, supply chain disruptions, and global uncertainties—such as rising U.S. interest rates—continue to affect the BWP/USD exchange rate. \cite{Mavee2016} identifies several drivers of exchange rate volatility, including domestic and U.S. economic shocks, commodity price fluctuations, financial market volatility, and political uncertainty. These findings underscore the relevance of macroeconomic fundamentals and market-based volatility measures in understanding currency movements. Additionally, \cite{Gue2022} notes that exchange rate movements, particularly for currencies like the South African Rand (ZAR) and the BWP, are significantly influenced by investor sentiment and public perception. While both currencies are subject to economic conditions and external shocks, their responses differ due to distinct market structures and exposure levels \citep{israel2023relationship}. Botswana's small, export-reliant economy—particularly on diamonds—makes it more vulnerable to global demand shifts. \cite{Botlhale2021} explains that a drop in global diamond demand negatively affects the Pula’s value, while domestic inflation and the monetary policy stance of the Bank of Botswana also play crucial roles \citep{Leith2020}.
+\newline
+Many empirical studies traditionally assume a linear relationship between macroeconomic indicators and exchange rates \citep{makatjane2017}. However, foundational work by \cite{granger1989} and others has shown that macroeconomic variables often exhibit asymmetric and non-linear behaviours. Failing to account for these non-linearities may result in misleading conclusions and flawed policy recommendations. As such, this study considers non-linear dynamics in evaluating exchange rate behaviour. \cite{arize2017exchange} emphasizes that fluctuations in exchange rates influence trade balances, as nominal currency movements affect real exchange rates. Understanding this interaction is crucial for sound macroeconomic management. Therefore, one key objective of this study is to determine whether a nonlinear, regime-dependent relationship exists between the BWP/USD and ZAR/USD exchange rates. Unlike linear models, a Markov-Switching Vector Error Correction Model (MS-VECM) captures changes across different market regimes, such as periods of stability and crisis \citep{makatjane2021predicting}.
+\newline
+Granger cointegration is widely used to test for long-run relationships between time series, but it assumes linearity. When relationships are non-linear, Granger methods may fail to capture the true dynamics \citep{castle2017clive}. Moreover, Granger’s method is limited to pairwise analysis, often neglecting interactions among multiple variables. Johansen's cointegration method \citep{johansen1988statistical}, in contrast, allows for multivariate analysis and identifies multiple cointegrating relationships simultaneously \citep{sekakela2019impact, yussuf2022cointegration}.The overarching objective of this study is to investigate regime-switching cointegration between BWP/USD and ZAR/USD exchange rates and assess their dependency structure. The secondary objectives are: to estimate the MS-VECM to capture nonlinear, long-run relationships and to use the Clayton copula to evaluate dependence, especially during periods of heightened volatility or structural shifts, as demonstrated in \cite{LIU2020106808}. This dual approach helps reveal how these currencies interact under varying market conditions and offers insights for policymakers and investors navigating regional currency risks.
+\section{Literature Review}
+The financial chaos that has hit developing markets in recent decades has prompted the need for a precise assessment of the risks to the country. Many studies worldwide have developed several models to explain and predict the relationship between macroeconomic and financial variables \citep{staehr2021macroeconomic}. When observing the relationship empirically, it is important to be clear about how a relationship is defined. The purpose of the present study is to investigate the regime-switching cointegration between Botswana and South African currencies. This chapter discusses the models used to determine the regime-switching cointegration. 
+
+Cointegration of macroeconomic variables introduced by \cite{granger1989} has greatly influenced the study and exploration of closely estimating the predictions of macroeconomic variables over time. 
+\cite{karlsen2007nonparametric} introduce two time series and are said to be linearly cointegrated if two conditions suffice: both time series are non-stationary and of unit root type and there exists a linear combination such that there is stationarity. In \cite{haug2011linear}, a comparison between linear and non-linear cointegration in testing long-term purchasing power parity (PPP) for the G-10 countries is made, and there is a limiting case to which both cointegration methods required by long-run PPP are applied. The authors found that in the comparison between linear and non-linear, non-linear cointegration performed better than linear cointegration in short term PPP cointegration. As such, there are cases where fluctuations and periods of volatility influence the dynamic changes of such variables, and as such, it does not suffice to conclude a linear cointegration seen in \cite{dufrenot2012recent} arguments.
+\newline
+\cite{makatjane2024forecasting} highlights that due to the nature of linear correlation, it is popularly viewed as a measure of dependence; in episodes of financial crisis, the importance of pairwise modelling of variables measuring their dependence introduces an aspect of non-linear cointegration amongst such variables.
+Thus, in achieving stationarity for non-linear cointegration, \cite{dufrenot2012recent} had enquired about the aspects of non-stationarity; the mean and variance of a time series do not satisfy the conditions of stationarity. That is, the mean and variance are constant for time-varying parameters. The authors are implying that the characteristic polynomials of time-varying parameters or regime-switching processes have a unit root greater than the modulus of 1. Furthermore, the author's queries surrounding non-stationarity involving regime-switching models that include an ergodic Markov chain confirmed that there is a presence of a unit root greater than 1 in a model with two-regimes, thus implying non-stationarity. In the case of non-linear models, concerning the presence of non-stationarity, differencing of variables of interest has been effective in achieving stationarity; see \cite{doi:10.1080/01621459.1934.10502683} and \cite{shi2016nonlinear} definitions of I(0) and I(1) integration in non-stationarity.
+
+\subsection{Review on the Markov-Switching Vector Error Correction Model}
+\cite{phoong2013markov} state the deficiency of using linear time series models has on economic and financial data if the data exhibits asymmetry or volatility clustering, seen as conditions for non-linearity. 
+Regime switching models pertain to this study, a generalised Markov switching (MS) model developed by \cite{McCulloch1994} and further employed in a study conducted by \cite{hamilton2002new} and later on \cite{hamilton2013advances}. The authors provide an introspection into modelling a time series model using a Markov chain, reviewing the coefficients of a first-order autoregressive model AR(1) after an economic crisis and making adjustments to the AR(1) model to derive a probabilistic view from one regime to another.
+As a result, \cite{shi2016nonlinear} and \cite{makatjane2024forecasting} appreciate the robustness Markov switching (MS) models have with non-linear variables, especially when facing correlation dynamics and depicting non-smooth volatility to help effectively describe the short-term and long-term run dynamics between variables.
+\newline
+In regime-shifting models, the Markov switching vector error correction model (MS-VECM) are seen as an effective model for long-term dynamic relationships between variables due to the Markov chain. \cite{phoong2014linear} note the ability of a Markov chain to effectively allow the influence of shocks on the transition probability shifting between phases. The authors highlight that due to the nature of regimes being stationary due to an irreducible Markov chain, errors arising from regime shifts, MS-VECM corrects towards stationarity.
+
+%\subsection{Review of the Clayton Copula}
+
+This study focuses on employing the Clayton copula as a measure of dependency. Copula-based methods have become widely used in multiple aspects of economics, science and other disciplines. The classification of a copula in financial correlation analysis by \cite{LIU2020106808} describe two types of classes: the elliptical copula, which involves the Gaussian copula and Student's t copula, along with the Ali-Mikhail-Haq copula used in \cite{molefe2020roads}. Another is the Archimedean copula, which involves the Frank copula and, in this study, the Clayton copula, which determines the asymmetric relationship by the correlation of the lower and upper tails of a distribution \citep{LIU2020106808}. Archimedean classes of copulas are seen as a family of copulas that have derivations from the Clayton copula \citep{wang2010copula}, which mentions the ease of dealing with high-dimensional parameters, as Archimedean copulas include one or more parameters as compared to elliptical copulas. An insight into applying conditional copulas to time-varying exchange rates, the Japanese Yen (Yen) and German Deutsche Mark (DM) against the Dollar used by \cite{patton2001modelling}, compared the Gaussian copula and the Joe-Clayton copula as a strategy of dependence measures amongst the variables. The author found much more significance in dependency fitting the Joe-Clayton copula due to its ability to capture asymmetric tail dependence.
+
+\section{Methodology}\label{meth}
+
+\subsection{Introduction} 
+This chapter discusses the research methodology used in the study. It has two broad components: investigation of regime-switching cointegration and modelling dependencies between the two currencies. In this chapter, multivariate techniques such as those used to model cointegration and dependencies are covered.
+
+\subsection{Preliminary Analysis}\label{pre}
+This section of the study is in the form of a preliminary analysis. The analysis involves numerous tests, hypothesis formulation, and significance that the mentioned tests below have on the study between the BWP/USD and ZAR/USD to explain and describe the non-linear relationship both exchange rates have in the long and short-term run. This allows for the usage of a vector error correction model that employs a regime-switching Markov process to determine the short-term dynamics between exchange rates, cointegration to capture the long-term interactions, and the Clayton copula along with dependence measures. 
+
+
+
+\subsection{Test for Normality}
+Evaluation of distributional characteristics like symmetry and tail behaviour is aided by central moments. According to \cite{Bai2005}, the $r^{\text{th}}$ central moment of a series $X_{t}$ is $\mu_{r} = E[(x - \mu)^r]$, where $\mu_2 = \sigma^2$. The third and fourth central moments are used to calculate skewness and kurtosis, which are as follows:
+
+\begin{align}\label{eq1} 
+\gamma_{s} = \frac{E[(x-\mu)^{3}]}{\sqrt{E[(x-\mu)^{2}]^{3}}}, \quad \kappa_{k} = \frac{E[(x-\mu)^{4}]}{E[(x-\mu)^2]^{2}}
+\end{align}
+
+When sample moments are used, skewness becomes:
+\begin{align*}
+    \gamma_{s} = \frac{\frac{1}{n}\Sigma_{i=1}^{n}(x_{i} - \Bar{x})^{3}}{\frac{1}{n}\Sigma_{i=1}^{n}[(x_{i} - \Bar{x})^{2}]^{3/2}}
+\end{align*}
+where adjustments can be made to formulate a standardised moment coefficient given as:
+ \begin{align}\label{eq3}
+     \gamma_{adjs} = \frac{n}{(n-1)(n-2)}\Sigma_{i=1}^{n} (\frac{(x_{i} - \Bar{x})}{\sigma})^{3}
+ \end{align}
+
+A longer left tail can be seen by negative skewness ($\gamma < 0$), whereas a longer right tail is suggested by positive skewness ($\gamma > 0$); symmetry is reflected by $\gamma = 0$. $\kappa_k < 3$ for kurtosis denotes platykurtic (light tails), $\kappa_k > 3$, indicates leptokurtic (heavy tails), and $\kappa_k = 3$ suggests mesokurtic (normal distribution).
+However, skewness and kurtosis alone may be insufficient; thus, formal tests like the Jarque-Bera and Anderson-Darling are also employed \citep{geary1947testing, Bai2005}.
+
+
+  
+\subsection{Test for Highly Correlated Returns}
+In the context of financial and economic data, instabilities and abnormalities across time series are checked and tested for high correlation, as indicated by \cite{chesnay2001does}. Several tests have been documented for highly correlated returns, but this study employs Johansen's cointegration test, Kendall's tau, and Spearman's rank correlation.
+
+
+\subsubsection*{Kendall's Tau and Spearman's Rank}
+
+Kendall's tau compares concordant (C) and discordant (D) pairs of $(X_i, Y_i)$ and $(X_j, Y_j)$ to determine monotonic dependence \citep{shiekh2022comparison}:
+\begin{align} 
+\tau_k = \frac{2(C - D)}{n(n - 1)} 
+\end{align}
+where $\delta(X,Y) = \delta(Y,X) \in [-1,1]$ is satisfied with $\delta = 1$ for  , $-1$ for  and $0$ for independence \citep{molefe2020roads}.
+Additionally, monotonic relationships are captured by Spearman's rank correlation \citep{gauthier2001detecting}:
+\begin{align}
+\rho_k = 1 - \frac{6\sum_{i=1}^{n} d_i^2}{n(n^2 - 1)} 
+\end{align} 
+where $d_i$ is the rank difference.
+
+\subsubsection*{Johansen cointegration Test}
+The Johansen cointegration test, introduced by \cite{johansen1988statistical}, is an alternative to Granger's cointegration test for analysing non-stationary cointegrated vectors and has been widely used by many authors, including \cite{poh1997performance}.The Johansen cointegration
+test process involves assessing the rank of coefficients in a vector error correction
+model (VECM) as indicated by \cite{lutkepohl2005new}.
+The maximum eigenvalue statistic is used by the Johansen test to evaluate cointegration \citep{johansen1988statistical}:
+\begin{align} \lambda_{eigen}(r, r+1) = -n \ln(1 - \lambda_{r+1})
+\end{align}
+where $n$ is the sample size, $\lambda_{r+1}$ presents the number of eigenvalues in the matrix. As such, the null hypothesis is formulated as $H_{0}:\lambda_{eigen} = r $, the alternative, $H_{1}: \lambda_{eigen} = r+1$.
+If the null hypothesis $H_0: r$ is rejected for p-value less than 5\% significance level, then there is at least cointegration factor present.
+
+\subsection{Nonlinear and Nonlinear Unit Root Tests}
+
+Linear time series models are often inadequate for capturing key features of financial data, such as mean reversion, volatility clustering, and structural breaks. To address these limitations, this study employs both linear and nonlinear unit root tests.
+
+\subsubsection{Nonlinear Tests}\label{Nonlinear}
+This study applies White’s neural network test \citep{white1998additional, Makatjane2017Application}, a flexible test based on multilayer feedforward networks. Let $Zt=(Yt,Xt)$, where $Y_t$ is a scalar dependent variable and $X_t$, a row vector of regressors. The conditional expectation function is:
+\begin{equation}
+g(X_t) = \mathbb{E}(Y_t \mid X_t),
+\end{equation}
+which is approximated using a neural network:
+\begin{equation}
+0 = \tilde{x} \gamma_0 + \sum_{j=1}^{q} \beta_j \delta(\tilde{x}, \gamma_j) = f(\tilde{x}, \theta),
+\end{equation}
+where, $o$ is the network output and $\tilde{x}=\left( 1,x\right)$ is a conformable column vector of the connection strengths from the input layer, $j=0, \cdots, q$, with $\beta_{j}$ being a scalar connection strength from the hidden unit $j$ to the output unit $j=0, \cdots, q$, while $\delta$ is
+a veil of secrecy function that follows either a logistic or hyperbolic tangent squasher. In this case, $q$ symbolises the number of hidden units with connection strengths that are not constrained to zero The null hypothesis asserts that this network adequately represents $g$:
+$H_{0}: P\left[ g\left( X_t \right) = f\left( X_t, \theta^{\ast} \right)\right]=1$ for some $\theta^{\ast}$.
+
+The alternative is such that $H_{1}: P\left[ g\left( X_t \right) = f\left( X_t, \theta^{\ast} \right)\right]<1$ for all $\theta$ such that the network is unable to exact the representation of g. A Lagrange Multiplier (LM) test of \cite{engle1982autoregressive} is used to test the null hypothesis, based on the regression:
+\begin{equation}\label{eq:lm}
+\hat{\varepsilon}^2_t = \eta_0 + \sum_{i=1}^{m} \eta_i \hat{\varepsilon}^2_{t-i} + e_t,
+\end{equation}
+where $\eta_{0}, \cdots, \eta_{m}$ are the parameter estimates, $e_t \sim i.i.d \left( \mu =0, \sigma^{2}_{\varepsilon} =1\right) $,
+with the F-test statistic given as:
+\begin{equation}\label{eq:fstat}
+F = \frac{RSS/k}{SSE/(n-k-1)} \sim F_{k,n-k-1},
+\end{equation}
+where RSS and SSE denote regression and error sums of squares, respectively. Rejection of the null hypothesis at 5\% significance level implies nonlinearity.
+
+\subsubsection{Nonlinear Unit Root Tests}
+
+Given the nonlinearity in financial data, traditional unit root tests may be insufficient. This study applies two nonlinear unit root tests: the KSS test and Perron’s test, both of which account for structural breaks and smooth transitions.
+
+The Kapetanios, Shin, and Shell (KSS) test, based on an Exponential Smooth Transition Autoregressive (ESTAR) process, is suited for series with gradual adjustments:
+\begin{equation}\label{KSStest}
+\Delta y_t = \gamma y_{t-1}[1 - \exp(-\theta y_{t-1}^2)] + \epsilon_t,
+\end{equation}
+where $\epsilon_{t} \sim N(0,\sigma^{2})$, $y_{t}$ represents a detrended time series, $\gamma$ denotes an unknown parameter $\theta \geq 0$. Non-linear adjustment is captured by the exponential transition function \( [1 - \exp(-\theta y_{t-1}^{2})] \). When tested against the alternative, \( H_{1}: \theta > 0 \), the null hypothesis \( H_{0}: \theta = 0 \) is rejected if the p-value is less than the 5\% significance level \citep{cuestas2010nonlinearities}.
+Perron’s non-linear test \citep{perron1990testing} is designed to detect unit roots in the presence of structural breaks. The regression model is:
+\begin{equation}\label{Perron}
+\Delta y_t = \alpha + \beta y_{t-1} + \theta F(y_{t-d}, \gamma, c) + \epsilon_t,
+\end{equation}
+where $F(y_{t-d},\gamma,c)$ is a smooth transition function, $\theta$ represents nonlinear adjustment, and $c$ is a threshold. The null hypothesis  $H_{0}: |\phi_{t}| = 1$ against $H_{1}: |\phi_{t}| > 1$, where $|\phi_{t}|$ represents the magnitude of the variable. Rejection at the 5\% level (using critical values from \cite{perron1989great}) supports stationarity with structural breaks.
+\subsection{Markov-switching Vector Error Correction Model}\label{markov}
+Regime-switching processes governed by a Markov chain process have seen to the establishment of an MS-VECM model. \cite{hamilton2013advances} partially introduced a regime-switching model derived from a first-order autoregressive AR(1) model for a time series $y_{t+1|t} = \alpha_{1} +\beta y_{t} + \epsilon_{t} $ given by updated coefficients to account for recessions, $y_{t} = \alpha_{s_{t}} + \phi_{s_{t}}y_{t-1} + \epsilon_{t}$ with states $s_{t}$ being regime indicators such that a Markov chain is given as:
+\begin{align}
+    P(s_{t} = j | s_{t-1} = i, s_{t-2} =k,...,y_{t-2,...}) = P(s_{t} = j | s_{t-1} = i) = p_{ij}
+\end{align}
+where $p_{ij}$ is the probability of switching from regime $i$ to regime $j$, explaining a probabilistic dynamic description of $y_{t}.$ The transitions between regimes are deemed probabilistic. They can define a transition matrix derived from \cite{chung1960transition}, a general $i \times j$ transition matrix is given by:
+\begin{align*}
+    P(s_{t} = j | s_{t-1} = i) = \begin{bmatrix}
+        p_{11} & p_{12} & \hdots & p_{1j} \\
+        p_{21} & p_{22} & \hdots & p_{2j} \\
+        \vdots & \vdots & \hdots & \vdots \\
+        p_{i1} & p_{i2} & \hdots & p_{ij}.
+    \end{bmatrix}
+\end{align*}
+Nonetheless, \cite{phoong2014linear} states that the MS-VECM model initially proposed by \cite{krolzig1996statistical} serves as an error correction model that, in each disequilibrium regime, can be rectified into stationary regimes following an irreducible Markov chain. The integrated I(1) model specification is given as:
+\begin{align}\label{MS-VECM}
+    \Delta Y_{t} = v(s_{t}) + \alpha(s_{t})(\beta^{'}(s_{t})Y_{t-1}) + \Sigma^{p-1}_{i=1} \Gamma_{i}(s_{t})\Delta Y_{t-i} + \epsilon_{t}
+\end{align}
+where $\Delta Y_{t}$ denote a vector variable that has been differenced once, $v(s_{t})$ represent the unobservable regime indicator variable, $p$ indicate the number of lags in a short-term run, and $\epsilon_{t}$ is distributed as $N(0,\Sigma (s_{t}))$ and it is independently and identically distributed (i.i.d). $s_{t}$ denotes the regime or state of a Markov chain at time $t$. $\alpha(s_{t})$ represents the regime-dependent adjusted coefficient, $\beta^{'}(s_{t})$ indicates the regime-dependent Cointegration vector, and $\Gamma_{i}(s_{t})$ refers to the $i^{th}$ regime-dependent short-term run parameter \citep{phoong2013markov, hamilton2013advances}. 
+
+The likelihood ratio (LR) test, which makes model selection easier when parameters follow a Markov process, can be used to evaluate the number of regimes and structural changes \citep{qu2021likelihood}. The alternative $H_{1}: \omega > 1$ (multiple regimes) is tested against the null hypothesis $H_{0}: \omega = 1$ (single regime). The LR statistic is calculated as follows: \begin{align} L = -2(L_{0} - L_{1}), \end{align}, where $L_{0}$ and $L_{1}$ represent the log-likelihoods under $H_0$ and $H_1$, respectively. With $\Delta n$ degrees of freedom, the test statistic has a chi-square distribution, $L \sim \chi^2_{1-\alpha,\Delta n}$. If the p-value is less than $\alpha = 0.05$ \citep{qu2021likelihood}, $H_{0}$ is rejected.
+
+Because regime-switching models are computationally complex, parameter estimation is done using the Expectation-Maximization (EM) algorithm \citep{makatjane2024forecasting}. Iteratively, the EM algorithm does the following:
+\begin{itemize}
+\item \textbf{E-step:} calculates the expectedlog-likelihood using regime probabilities (for example, through the Hamilton filter) \citep{hamilton2002new}.\item \textbf{M-step:} maximises this expectation to update model parameters, such as transition probabilities \citep{kim2017state}, short-run dynamics $\Gamma_i(s_t)$, cointegration vectors $\beta'(s_t)$, and adjustment coefficients $\alpha(s_t)$.
+\end{itemize}
+
+\subsection{Dependence Measure using Clayton Copulas}\label{depen}
+The definition of a $n$-multivariate copula that is uniformly distributed, denoted as $c \sim U[0,1]$, is derived from Sklar's theorem, as acknowledged by \cite{cuvelier2005clayton}. This classification is divided into two groups: the elliptical copula, utilised in \cite{molefe2020roads}, and the Archimedean family of copulas, with the Clayton copula as a foundational example \citep{LIU2020106808}.  Clayton copulas are defined by a generator function $\phi$ expressed as follows:
+\begin{align}
+    C(u_{1},...,u_{n}) = \phi^{-1}(\Sigma_{i=1}^{n} \phi_{i}u_{i})
+\end{align}
+where $\phi \in [0,1] \: to \:[0,\infty]$ \citep{wang2010copula} and has properties \citep{cuvelier2005clayton} outlined as:
+\begin{itemize}
+    \item $\phi$ is continuously decreasing
+    \item $\phi(0) = \infty$
+    \item $\phi(1) = 0$
+    \item $\phi^{-1}$ is completely monotonic on $[0,\infty]$ that is, $(-1)^{k} \frac{d^{k}}{dt^{k}}\phi^{-1}, \: \forall t \in [0,\infty] \: ,\forall k$
+\end{itemize}
+such that using the generator $\phi_{\theta}(t) = t^{\theta} - 1$ the Clayton copula can be formulated as:
+\begin{align}
+     C(u_{1},...,u_{n}) = (1 - n + \Sigma_{i=1}^{n} u_{i}^{-\theta})^{\frac{-1}{\theta}}
+\end{align}
+which can be maximised if and only if the copula $\theta > 0$ \citep{cuvelier2005clayton}. Dependence metrics, like Kendall's tau and Spearman's rho correlation coefficients, may be used with Clayton's copula.  Kendall's tau is used to assess the degree of dependency between variables, and using a copula, denoted as $\theta$, may be refined to:
+\begin{align}
+    \gamma = \frac{\theta}{\theta + 2}
+\end{align}
+where the Spearman's rho can also be refined using the copula $\theta$ as:
+\begin{align}
+    \rho = \frac{\theta}{\theta + 1}
+\end{align}
+as both measures have a range from -1 to 1 to indicate the strength of dependence, \citep{nelsen2006archimedean}. Lastly, a key feature of the Clayton copula is the measure of lower tail dependence, particularly in our case the asymmetry of the exchange rates against the U.S. Dollar are of concern during episodes of crisis \citep{shamiri2011tail}. The lower tail dependence is defined as:
+\begin{align}
+    \lambda_{l} = \lim_{u \to 0} P(V \leq F^{-1}_{V}(u) | U \leq F^{-1}_{U}(u)) 
+\end{align}
+where $F_{U}(u)$ and $F_{V}(u)$ are cumulative distribution functions or two random variables and $ \lambda_{l} = 2^{-1/\theta}$ is the lower tail dependence coefficient based on $\theta$, see \cite{HUA20111454} for further insights into measuring lower tail dependence. It is important to note that when $\theta > 0$ there is evidence of lower tail dependence from the Clayton copula, when $\theta = 0$ there is evidence of independence and when $\theta \to \infty $ there is perfect dependence exhibited by the Clayton copula \citep{nelsen2006archimedean}.
+
+\section{Empirical Analysis and Results}
+Yahoo Finance provided the daily BWP/USD and ZAR/USD exchange rates from January 1 2015 to November 14 2024. Due to market closures on weekends and holidays, a five-day frequency was employed after \cite{makatjane2024forecasting}. Since 2018, both currencies have decreased in value relative to the USD, despite the Pula's overall strength over the Rand. Their movements were similar between 2015 and 2020, but the BWP declined less during the COVID-19 pandemic than the more volatile, floating ZAR, which is impacted by global shocks and a less diversified economy \citep{Thupeng2021,masuku2016relationship}. The Pula recovered more slowly after the lockdown in 2021, but the Rand recovered more swiftly. Global unpredictability and geopolitical concerns, such as purported arms deals with Russia, further contributed to the ZAR's volatility \citep{ryan2023understanding}.
+
+\begin{table}[ht]
+\centering
+\caption{Normality, Highly correlated returns and Cointegration Test Results}
+\label{tab:table1}
+\scriptsize
+\vspace{0.3cm}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Category} & \textbf{Test} & \textbf{BWP/USD} & \textbf{ZAR/USD}& \textbf{p-value} \\
+\midrule
+\multirow{4}{*}{Normality} 
+  & Skewness & -0.4086 & 0.1252 & -- \\
+  & Kurtosis & -0.9169 & -0.7760& -- \\
+  & Jarque-Bera & 161.93 & 71.37 & $<0.001$ \\
+  & Anderson-Darling & 4818.1 & 4674.6& $<0.001$ \\
+\midrule
+\multirow{3}{*}{Correlation and Cointegration}
+  & Kendall's $\tau$ & \multicolumn{2}{c}{0.8858} & -- & -- \\
+  & Spearman's Rank & \multicolumn{2}{c}{0.9810} & -- & -- \\
+  & Johansen (Max Eigenvalue) & \multicolumn{2}{c}{0.0079} & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newline
+The BWP/USD and ZAR/USD normality tests are shown in Table~\ref{tab:table1}. Both have platykurtic distributions; ZAR/USD is slightly right-skewed, and BWP/USD is left-skewed with negative excess kurtosis. These findings are consistent with the Nigerian currency's \cite{aliyu2023statistical}. According to the Jarque-Bera and Anderson-Darling tests, normality is rejected at 5\% significance level, indicating that non-normality and asymmetry support the use of MS-VECM \citep{makatjane2024forecasting, hamilton2013advances}. Moreover, the BWP/USD and ZAR/USD have a strong positive monotonic relationship, according to Kendall's tau in Table~\ref{tab:table1}, indicating that the two rates move together over time. This encourages additional cointegration testing with Johansen's approach. At least one cointegrating relationship between the exchange rates was confirmed by the maximum eigenvalue test, which produced $\lambda_{eigen}=0.0079$ with a statistic of 20.49, having rejected the null hypothesis at 5\% significance level.
+
+\begin{table}[ht]
+\centering
+\caption{White Test, KSS Test, and Phillips-Perron Results}
+\label{tab:page2_results}
+\scriptsize
+\vspace{0.3cm}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Nonlinear} & \textbf{Test} & \textbf{BWP/USD} & \textbf{ZAR/USD} & \textbf{Value} & \textbf{p-value} \\
+\midrule
+\multirow{1}{*}{White NN Test}
+  & F-Statistic & 5.844 & 10.232 & df = (2, 2573) & 0.0029 / $<$0.001 \\
+\midrule
+\multirow{2}{*}{KSS Nonlinear}
+  & Lag & \multicolumn{2}{c}{-0.0266 (SE=0.0147)} & t = -1.81 & 0.0703 \\
+  & Lag.1 & \multicolumn{2}{c}{-0.0571 (SE=0.0139)} & t = -4.10 & $<$0.001 \\
+\midrule
+\multirow{2}{*}{Phillips-Perron}
+  & Test Statistic & -2846.5 & -2474.5 & Lag = 9 & 0.01 \\
+  & Alternative Hyp. & Stationary & Stationary & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+Table \ref{tab:page2_results} compares models from the White's neural network F-test in equation \ref{eq:fstat} with the Lagrange multiplier model in equation \ref{eq:lm}. The p-values were all below the 5\% significance level, providing strong evidence in rejection of the null hypothesis. This implies that the neural network does not represent the indefinite function $g$, indicating non-linearity in the exchange rates, a result consistent with \cite{Makatjane2017Application}, who also found non-linearity in stock returns.
+
+Moreover, table \ref{tab:page2_results} presents regression models for BWP/USD and ZAR/USD, including a lagged version and its first-order difference (BWPUSD-ZARUSD.lag and BWPUSD-ZARUSD.lag.1). The differenced model’s p-value falls below 5\% significance level, confirming stationarity through differencing. The KSS test, using the Student’s t-test, confirms significance in identifying non-linear stationarity, as also shown in \cite{chang2015house,liu2010kss}. Both exchange rates share the same truncation lag and negative test statistics (Table \ref{tab:page2_results}). With a p-value of 0.01, there is strong evidence of stationarity, justifying the use of a regime-switching model \citep{makatjane2024forecasting}.
+
+\subsection{Markov switching vector error correction model-MS-VECM}
+The likelihood ratio test is used to test the number of regimes \citep{makatjane2024forecasting}. The test was formulated across the null hypothesis, which being that there is only one regime against the alternative being that there are at least two regimes at a 5\% significance level \citep{qu2021likelihood}. The results were as follows:
+\begin{table}[ht]
+\centering
+\caption{Likelihood ratio (LR) Test Results for \( BWPUSD \) and \( ZARUSD \).}
+\label{tab:LR test}
+\vspace{0.5cm}
+\begin{tabular}{lccc}
+\hline
+\textbf{Series} & \textbf{Test Statistic} & \textbf{Degrees of freedom (df)} & \textbf{p-value} \\
+\hline
+BWPUSD and ZARUSD & 348.7424 & 7 & $<0.001$  \\
+\hline
+\end{tabular}
+\end{table}
+\\
+As a result with the p-value in Table ~\ref{tab:LR test} being a very small number and is less than the 5\% significance level.
+The null hypothesis is rejected and there is sufficient evidence to justify the use of two regimes for the multivariate time series of the exchange rates \citep{makatjane2024forecasting}. This approach helps in further implementing the MS(GMHMM)-VECM model to assess cointegration of the data adjusted for two regimes \citep{phoong2013markov}.
+\subsubsection*{Transition probabilities ($p_{ij}$)}
+\[
+p_{ij} = 
+\begin{bmatrix}
+0.5933 & 0.4067 \\
+0.5895 & 0.4105
+\end{bmatrix}
+\]
+The transition probability matrix suggests that there is regime switching across the two regimes. With regime 1, $p_{11} = 0.5933$ indicates that there is a 59.33\% of the exchange rates remaining in a stable condition and $p_{22} = 0.4105$ indicates that there is a 41.05\% chance that the exchange rates will switch into periods of crisis and high volatility. This level of regime switching indicates that the exchange rates are dynamic in changing from stable conditions to experiencing episodes of crisis and shocks as stock markets influence the movements of exchange rates \citep{chkili2014exchange}.
+The cointegration relation vector $\beta$ for the two currencies given as:
+\[
+\beta = 
+\begin{bmatrix}
+1.0000 \\ -1.3500
+\end{bmatrix}
+\]
+Suggests that the formulation of a cointegrating equation can be represented as:
+\begin{align}\label{Cointegration}
+   \epsilon_{t}= BWPUSD -1.35 ZARUSD 
+\end{align}
+Where the cointegration parameters $\beta_{1} =1.000$ and $\beta_{2}= -1.350$ specifically $\beta_{2}$ suggests that the deviations away from long-term equilibrium represented by $\epsilon_{t}$ are cointergrated and the expectation is that there is stationarity over time such that the cointegration relationship is $BWPUSD = 1.35ZARUSD$.
+\begin{table}[h]
+    \centering
+     \caption{Results of dependence measures between the exchange rates}
+     \vspace{0.5cm}
+    \begin{tabular}{lcccc}
+    \hline
+    Kendall's \(\tau\)\ & Spearman's \(\rho\)\ & Clayton copula ($\theta$) & Lower tail dependence (\(\lambda_L\)) \\ 
+    \hline
+    0.355&0.524&1.1016&0.710 \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:dependence}
+\end{table}\\  
+Table \ref{tab:dependence} shows strong dependence between BWP/USD and ZAR/USD. Kendall’s tau and Spearman’s rho indicate positive association with  shared global influences. While the Clayton copula reveals high lower-tail dependence suggesting  shared movement during economic shocks and trade-related spillovers \citep{chlond2018costs}.
+
+\section{Conclusions and Recommendations}
+
+This study pursued two main objectives: (1) to estimate a Markov Switching Vector Error Correction Model (MS-VECM) that captures long-run regime-switching relationships between BWP/USD and ZAR/USD exchange rates, and (2) to model their dependency structure using the Clayton copula. For the first objective, diagnostic tests confirmed the series were stationary and non-normally distributed (see Table~\ref{tab:table1} and Table ~\ref{tab:page2_results}). Due to the absence of direct MS-VECM packages in R and Python, a hybrid MS(GMHMM)-VECM approach was employed. Gaussian Mixture Hidden Markov Models (GMHMMs) captured the regime-switching behaviour, with parameter estimation conducted via the Expectation-Maximisation algorithm \citep{bilmes1998gentle}. Results revealed distinct transitions between stable and volatile regimes. However, both exchange rates maintained long-run equilibrium. The second objective involved modelling dependence using the Clayton copula, chosen for its capacity to capture lower tail dependence. The exchange rates exhibited platykurtic distributions and significant positive associations, confirmed by Kendall’s tau and Spearman’s rho (see Table \ref{tab:dependence}). The copula results indicated strong lower tail dependence, suggesting heightened joint movement during periods of market stress and confirming spillover effects between the Botswana and South African financial markets. Although copulas are extensively studied in financial econometrics \citep{molefe2020roads, LIU2020106808}, applying the Clayton copula in this exchange rate context is novel.
+
+Technical limitations were encountered in applying MS models directly to multivariate data, as many R and Python packages were outdated or unsupported \citep{github2020, msbvar2016, mswm2021}. The hybrid MS(GMHMM)-VECM approach was computationally intensive but effective. Challenges inherent in the EM algorithm for parameter estimation \citep{pmlr-v23-anandkumar12} also constrained model complexity.
+However, the findings have practical implications for investors and policymakers. The presence of regime switching and tail dependence implies that the two currencies are closely linked, particularly during economic shocks. This has relevance for risk management and policy formulation by institutions such as the Bank of Botswana and the South African Reserve Bank. 
+Future research could consider neural network-based models to further explore  nonlinear regime-switching cointegration. Comparative studies using alternative mixture distributions such as Poisson or Student’s t could help evaluate the robustness of model specifications. Applying extreme value theory may also provide deeper insight into tail risks across regimes. Furthermore, exploring other copula families or time-varying dependence measures would enrich the literature on exchange rate dynamics.
+
+This study extends prior work on MS-VECM models \citep{phoong2013markov, chkili2014exchange} and copula applications in African finance \citep{molefe2020roads, masuku2016relationship} by integrating an Archimedean Clayton copula with a multivariate MS-VECM to examine the relationship between the Botswana Pula and South African Rand. Using daily exchange rate data from Yahoo Finance, the analysis focuses solely on exchange rate variables due to data limitations, excluding macroeconomic factors. Despite this, the study identifies a long-term regime-switching cointegration relationship between BWP/USD and ZAR/USD and captures their dependency structure through the Clayton copula. The results offer important insights for policymakers, investors, and researchers interested in exchange rate dynamics in Southern Africa. While the findings should be interpreted cautiously in broader economic contexts, they provide a foundation for improved financial risk management and cross-border economic policy. Future research would benefit from incorporating updated empirical studies on Botswana–South Africa economic integration \citep{Botlhale2021, israel2023relationship, Thupeng2021}.
+ \newpage
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}
+
+
